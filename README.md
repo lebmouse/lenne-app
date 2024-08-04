@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# lenne 일지
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 동적 문자열로 서버컴포넌트 사용
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+const data: RenderData = {
+  id: "1",
+  type: "Container",
+  props: {
+    direction: "row",
+    gap: 40,
+    padding: 80,
+  },
+  children: [
+    { id: "2", type: "Card", props: { name: "John", age: 20 } },
+    { id: "3", type: "Card", props: { name: "John2", age: 30 } },
+  ],
+};
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+const RenderItem = (await import(`../component/${renderValue.type}`)).default;
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+위와 같은 데이터를 사용해서 동적으로 렌더링 시키는게 가능
 
-## Learn More
+```
+ ✓ Generating static pages (5/5)
+ ✓ Collecting build traces    
+ ✓ Finalizing page optimization    
 
-To learn more about Next.js, take a look at the following resources:
+Route (app)                              Size     First Load JS
+┌ ○ /                                    138 B          87.2 kB
+└ ○ /_not-found                          874 B          87.9 kB
++ First Load JS shared by all            87 kB
+  ├ chunks/465-3c8c609a03ee62f2.js       31.5 kB
+  ├ chunks/f14ca715-be5973fc1a0704a8.js  53.6 kB
+  └ other shared chunks (total)          1.86 kB
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+○  (Static)  prerendered as static content
+```
 
-## Deploy on Vercel
+여러 파일을 참조해도 서버 컴포넌트라서 실제 로드 데이터는 차이 안남
+```
+┌ ○ /                                    142 B          87.2 kB // card 1만
+└ ○ /many-card                           142 B          87.2 kB // card 1,2,3
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```

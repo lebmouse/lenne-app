@@ -14,15 +14,19 @@ const data: RenderData = {
     padding: 80,
   },
   children: [
-    { id: "2", type: "Card", props: { name: "John", age: 20 } },
-    { id: "3", type: "Card", props: { name: "John2", age: 30 } },
+    { id: "2", type: "Card", props: { name: "John1", age: 21 } },
+    { id: "2", type: "Card2", props: { name: "John2", age: 22 } },
+    { id: "2", type: "Card2", props: { name: "John3", age: 23 } },
+    { id: "2", type: "Card3", props: { name: "John4", age: 24 } },
+    { id: "2", type: "Card3", props: { name: "John5", age: 25 } },
   ],
 };
 
 async function Render(props: { renderValue?: RenderData }) {
   const { renderValue } = props;
   if (!renderValue) return null;
-  const RenderItem = (await import(`../component/${renderValue.type}`)).default;
+  const RenderItem = (await import(`../../component/${renderValue.type}`))
+    .default;
   try {
     const { children } = renderValue;
     if (!children) {
@@ -51,7 +55,7 @@ async function Render(props: { renderValue?: RenderData }) {
 export default function Index() {
   return (
     <div>
-      123
+      <h1>Many Card</h1>
       <Render renderValue={data} />
     </div>
   );
