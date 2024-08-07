@@ -2,7 +2,7 @@ export interface RenderData {
   id: string;
   type: string;
   props: Record<string, unknown>;
-  children?: RenderData[] | RenderData;
+  children?: RenderData[] | RenderData | undefined;
 }
 
 export async function Render(props: { renderValue?: RenderData }) {

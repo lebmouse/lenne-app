@@ -72,6 +72,38 @@ export default function Input(props: { name: string }) {
 
 입력도 잘 됨
 
+## 컨테이터 100개가 아이템을 1000개로 재귀적 트리로 그림
+```tsx
+const genData = (count: number): RenderData => {
+  if (count === 0) {
+    return {
+      id: moduleId(),
+      type: "Card",
+      props: { name: `Last`, age: 0 },
+    };
+  }
+  const children: RenderData[] = range(1000).map((index) => ({
+    id: moduleId(),
+    type: "Card",
+    props: { name: `John${index}`, age: index + 1 },
+  }));
+  children.push(genData(count - 1));
+  return {
+    id: moduleId(),
+    type: "Container",
+    props: {
+      direction: "column",
+      gap: 40,
+      padding: 80,
+    },
+    children,
+  };
+};
+
+```
+
+번들 사이즈 없이 잘 그려지고 빌드 속도에도 큰 문제가 없음
+
 ## 파일 베이스 vs 코드 베이스
 - 파일베이스
   - 장점
