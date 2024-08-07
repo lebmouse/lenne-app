@@ -46,3 +46,37 @@ Route (app)                              Size     First Load JS
 
 
 ```
+
+## 클라이언트 상태가 있는 컴포넌트 테스트
+```tsx
+// component/input.tsx
+"use client";
+import { useId, useState } from "react";
+
+export default function Input(props: { name: string }) {
+  const [value, setValue] = useState("");
+  const id = useId();
+  const formId = `${props.name}-id`;
+  return (
+    <label id={formId}>
+      <span>{props.name}</span>
+      <input
+        id={formId}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </label>
+  );
+}
+```
+
+입력도 잘 됨
+
+## 파일 베이스 vs 코드 베이스
+- 파일베이스
+  - 장점
+    - 파일 구조를 강제할 수 있음 : 파일구조로 강제하면 구조파악이 쉬워짐
+  - 단점
+    - 유연성이 떨어짐
+    - 타입안전하게 힘들것 같음
+      - 동적으로 가져오거나 코드를 감시해서 생성하게 해야하는데 좀 이상할 것 같음

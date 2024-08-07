@@ -1,56 +1,36 @@
-interface RenderData {
-  id: string;
-  type: string;
-  props: Record<string, unknown>;
-  children?: RenderData[] | RenderData;
-}
+import { Render, RenderData } from "@/render/Render";
+import { nanoid } from "nanoid";
+
+const moduleId = () => nanoid(4);
 
 const data: RenderData = {
-  id: "1",
+  id: moduleId(),
   type: "Container",
   props: {
-    direction: "row",
+    direction: "column",
     gap: 40,
     padding: 80,
   },
   children: [
-    { id: "2", type: "Card", props: { name: "John1", age: 21 } },
-    { id: "2", type: "Card2", props: { name: "John2", age: 22 } },
-    { id: "2", type: "Card2", props: { name: "John3", age: 23 } },
-    { id: "2", type: "Card3", props: { name: "John4", age: 24 } },
-    { id: "2", type: "Card3", props: { name: "John5", age: 25 } },
+    { id: moduleId(), type: "Card", props: { name: "John1", age: 21 } },
+    { id: moduleId(), type: "Card2", props: { name: "John2", age: 22 } },
+    { id: moduleId(), type: "Card2", props: { name: "John3", age: 23 } },
+    { id: moduleId(), type: "Card3", props: { name: "John4", age: 24 } },
+    { id: moduleId(), type: "Card3", props: { name: "John5", age: 25 } },
+    {
+      id: moduleId(),
+      type: "Container",
+      props: {
+        direction: "row",
+        gap: 20,
+      },
+      children: [
+        { id: moduleId(), type: "Card", props: { name: "John6", age: 26 } },
+        { id: moduleId(), type: "Card3", props: { name: "John8", age: 28 } },
+      ],
+    },
   ],
 };
-
-async function Render(props: { renderValue?: RenderData }) {
-  const { renderValue } = props;
-  if (!renderValue) return null;
-  const RenderItem = (await import(`../../component/${renderValue.type}`))
-    .default;
-  try {
-    const { children } = renderValue;
-    if (!children) {
-      return <RenderItem {...renderValue.props} />;
-    }
-    if (children instanceof Array && children.length > 0) {
-      return (
-        <RenderItem {...renderValue.props}>
-          {children.map((child) => {
-            return <Render key={child.id} renderValue={child} />;
-          })}
-        </RenderItem>
-      );
-    } else if (children instanceof Array === false) {
-      return (
-        <RenderItem {...renderValue.props}>
-          <Render renderValue={children} />
-        </RenderItem>
-      );
-    }
-  } catch (e) {
-    throw e;
-  }
-}
 
 export default function Index() {
   return (
