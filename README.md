@@ -104,6 +104,40 @@ const genData = (count: number): RenderData => {
 
 번들 사이즈 없이 잘 그려지고 빌드 속도에도 큰 문제가 없음
 
+## 이벤트가 있는 컴포넌트
+```tsx
+"use client";
+import openAlert from "@/action/openAlert";
+
+export default async function ActionButton(props: { name: string }) {
+  return (
+    <button
+      onClick={() => {
+        openAlert("hello");
+      }}
+    >
+      {props.name}
+    </button>
+  );
+}
+```
+rsc라서 위와 같이 openAlert이 있을 때는 "use client";라고 붙혀야됨
+대신 클라이언트 컴포넌트임
+```tsx
+    {
+      id: moduleId(),
+      type: "ActionButton",
+      props: { name: "openAlert first", onClick: () => console.log("hi") },
+    },
+```
+대신 이벤트 함수를 직접 전달해주면 안되고 다른 방법이 필요함. 다음과 같은 에러가 나옴
+```
+Error: Event handlers cannot be passed to Client Component props.
+  <... name=... onClick={function onClick}>
+                        ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+```
+
 ## 파일 베이스 vs 코드 베이스
 - 파일베이스
   - 장점
