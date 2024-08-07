@@ -15,12 +15,12 @@ const data: RenderData = {
     {
       id: moduleId(),
       type: "ActionButton",
-      props: { name: "openAlert first" },
+      props: { name: "openAlert", action: "openAlert" },
     },
     {
       id: moduleId(),
       type: "ActionButton",
-      props: { name: "openAlert second" },
+      props: { name: "openConfirm", action: "openConfirm" },
     },
   ],
 };

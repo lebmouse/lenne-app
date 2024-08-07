@@ -138,6 +138,34 @@ Error: Event handlers cannot be passed to Client Component props.
 If you need interactivity, consider converting part of this to a Client Component.
 ```
 
+## 비동기 액션
+```tsx
+const [action, setAction] = useState();
+useEffect(() => {
+  import(`@/action/${actionName}`)
+  .then((value)=> setAction(value.default));
+},[actionName])
+```
+와 같은 방식으로 하면 동적으로 할 수 있음
+```
+Route (app)                              Size     First Load JS
+┌ ○ /                                    628 B          87.7 kB
+├ ○ /_not-found                          874 B            88 kB
+├ ○ /action-test                         628 B          87.7 kB
+├ ○ /many-card                           628 B          87.7 kB
+├ ○ /too-many                            628 B          87.7 kB
+└ ○ /with-state                          628 B          87.7 kB
+```
+번들도 그대로임
+아쉬운건 use로 하면 깔끔한데 사용하지 말라고 경고를 줌
+
+```tsx
+const action = use(import(`@/action/${props.action}`).then((m) => m.default));
+// A component was suspended by an uncached promise. 
+// Creating promises inside a Client Component or hook is not yet supported, 
+// except via a Suspense-compatible library or framework.
+```
+
 ## 파일 베이스 vs 코드 베이스
 - 파일베이스
   - 장점
