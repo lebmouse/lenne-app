@@ -3,6 +3,7 @@ import { useAction } from "@/core/hook/useAction";
 
 export default function ActionButton(props: {
   name: string;
+  /** @example hi-action */
   action: string;
   event?: {
     onClick?: string;
