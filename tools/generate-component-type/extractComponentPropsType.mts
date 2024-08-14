@@ -7,65 +7,69 @@ export function extractComponentPropsType({ source }: { source: string }) {
   });
   const member = analyzePropsType(ast);
   if (!member) return "";
-  const memberSource = recast.print(member).code;
-  return memberSource;
+  return recast.print(member).code;
 }
 
 type Member = recast.types.namedTypes.ASTNode;
 
 function analyzePropsType(ast: recast.types.ASTNode): Member | undefined {
   let extractedProps: Member | undefined = undefined;
+
   recast.types.visit(ast, {
     visitExportDefaultDeclaration(exportDefaultPath) {
       const declaration = exportDefaultPath.node.declaration;
-      if (isFunctionDelcaration(declaration) && declaration.params?.[0]) {
-        const firstParam = declaration.params[0];
 
-        if (firstParam.type === "Identifier") {
-          extractedProps = extractPropsFromFunctionDeclaration(
-            ast,
-            declaration
-          );
-        } else if (firstParam.type === "ObjectPattern") {
-          const typeAnnotation =
-            extractTypeAnnotationFromObjectPattern(firstParam);
-
-          if (typeAnnotation?.type === "TSTypeLiteral") {
-            extractedProps = typeAnnotation;
-          }
-        }
+      if (isFunctionDeclaration(declaration)) {
+        extractedProps = extractPropsFromFunctionDeclaration(ast, declaration);
       } else if (declaration.type === "Identifier") {
         const exportedName = declaration.name;
-        recast.types.visit(ast, {
-          visitVariableDeclaration(varaiblePath) {
-            varaiblePath.node.declarations.find((declaration) => {
-              if (
-                declaration.type === "VariableDeclarator" &&
-                declaration.id.type === "Identifier" &&
-                declaration.id.name === exportedName &&
-                declaration.init &&
-                isFunctionDelcaration(declaration.init)
-              ) {
-                extractedProps = extractPropsFromFunctionDeclaration(
-                  ast,
-                  declaration.init
-                );
-              }
-            });
-          },
-          visitFunctionDeclaration(functionPath) {
-            extractedProps = extractPropsFromFunctionDeclaration(
-              ast,
-              functionPath.node
-            );
-            this.traverse(functionPath);
-          },
-        });
+        extractedProps = findPropsInDeclarations(ast, exportedName);
       }
 
       this.traverse(exportDefaultPath);
     },
   });
+
+  return extractedProps;
+}
+
+function findPropsInDeclarations(
+  ast: recast.types.ASTNode,
+  exportedName: string
+): Member | undefined {
+  let extractedProps: Member | undefined = undefined;
+
+  recast.types.visit(ast, {
+    visitVariableDeclaration(variablePath) {
+      variablePath.node.declarations.forEach((declarator) => {
+        if (
+          declarator.type === "VariableDeclarator" &&
+          declarator.id.type === "Identifier" &&
+          declarator.id.name === exportedName &&
+          declarator.init &&
+          isFunctionDeclaration(declarator.init)
+        ) {
+          extractedProps = extractPropsFromFunctionDeclaration(
+            ast,
+            declarator.init
+          );
+        }
+      });
+
+      this.traverse(variablePath);
+    },
+    visitFunctionDeclaration(functionPath) {
+      if (functionPath.node.id && functionPath.node.id.name === exportedName) {
+        extractedProps = extractPropsFromFunctionDeclaration(
+          ast,
+          functionPath.node
+        );
+      }
+
+      this.traverse(functionPath);
+    },
+  });
+
   return extractedProps;
 }
 
@@ -79,32 +83,29 @@ function extractPropsFromFunctionDeclaration(
   const firstParam = declaration.params[0];
 
   if (firstParam.type === "Identifier") {
-    const typeAnnotation = extractTypeAnnotationFromFunction(declaration);
-    if (typeAnnotation?.type === "TSTypeLiteral") {
-      return typeAnnotation;
-    } else if (
-      typeAnnotation?.type === "TSTypeReference" &&
-      typeAnnotation.typeName.type === "Identifier"
-    ) {
-      const typeDeclaration = findTypeDeclaration(
-        ast,
-        typeAnnotation.typeName.name
-      );
-      if (typeDeclaration) {
-        if (
-          typeDeclaration.type === "TSTypeAliasDeclaration" &&
-          typeDeclaration.typeAnnotation.type === "TSTypeLiteral"
-        ) {
-          return typeDeclaration.typeAnnotation;
-        } else if (typeDeclaration.type === "TSInterfaceDeclaration") {
-          return typeDeclaration.body;
-        }
-      }
-    }
+    return extractPropsFromIdentifier(ast, firstParam);
+  } else if (firstParam.type === "ObjectPattern") {
+    return extractTypeAnnotationFromObjectPattern(firstParam);
   }
 }
 
-function isFunctionDelcaration(
+function extractPropsFromIdentifier(
+  ast: recast.types.ASTNode,
+  identifier: recast.types.namedTypes.Identifier
+): Member | undefined {
+  const typeAnnotation = identifier.typeAnnotation?.typeAnnotation;
+
+  if (typeAnnotation?.type === "TSTypeLiteral") {
+    return typeAnnotation;
+  } else if (
+    typeAnnotation?.type === "TSTypeReference" &&
+    typeAnnotation.typeName.type === "Identifier"
+  ) {
+    return findTypeDeclaration(ast, typeAnnotation.typeName.name);
+  }
+}
+
+function isFunctionDeclaration(
   declaration:
     | recast.types.namedTypes.Declaration
     | recast.types.namedTypes.Expression
@@ -119,44 +120,22 @@ function isFunctionDelcaration(
   );
 }
 
-function extractTypeAnnotationFromFunction(
-  declaration:
-    | recast.types.namedTypes.FunctionDeclaration
-    | recast.types.namedTypes.ArrowFunctionExpression
-    | recast.types.namedTypes.FunctionExpression
-) {
-  if (
-    !declaration.params?.[0] ||
-    declaration.params?.[0].type !== "Identifier"
-  ) {
-    return;
-  }
-  const [props] = declaration.params;
-  if (props.type == "Identifier" && props.typeAnnotation?.typeAnnotation) {
-    return props.typeAnnotation.typeAnnotation;
-  }
-}
-
 function extractTypeAnnotationFromObjectPattern(
   pattern: recast.types.namedTypes.ObjectPattern
-) {
-  if (pattern.typeAnnotation?.typeAnnotation) {
-    return pattern.typeAnnotation.typeAnnotation;
-  }
+): Member | undefined {
+  return pattern.typeAnnotation?.typeAnnotation ?? undefined;
 }
 
 function findTypeDeclaration(
   ast: recast.types.ASTNode,
   typeName: string
-):
-  | recast.types.namedTypes.TSTypeAliasDeclaration
-  | recast.types.namedTypes.TSInterfaceDeclaration
-  | undefined {
-  let foundDeclaration;
+): Member | undefined {
+  let foundDeclaration: Member | undefined;
+
   recast.types.visit(ast, {
     visitTSTypeAliasDeclaration(path) {
       if (path.node.id.name === typeName) {
-        foundDeclaration = path.node;
+        foundDeclaration = path.node.typeAnnotation;
       }
       this.traverse(path);
     },
@@ -165,10 +144,11 @@ function findTypeDeclaration(
         path.node.id.type === "Identifier" &&
         path.node.id.name === typeName
       ) {
-        foundDeclaration = path.node;
+        foundDeclaration = path.node.body;
       }
       this.traverse(path);
     },
   });
+
   return foundDeclaration;
 }

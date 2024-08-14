@@ -128,4 +128,103 @@ describe("extractComponentPropsType 함수", () => {
     });
     expect(formatCode(propsSource)).toBe(expectedPropsSource);
   });
+
+  it("React.forwardRef로 정의된 컴포넌트의 props 타입을 추출해야 한다.", async () => {
+    const propsSource = extractComponentPropsType({
+      source: `
+      import React from 'react';
+
+      type Props = {
+        name: string;
+        age: number;
+      };
+
+      const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+        return (
+          <div ref={ref}>
+            <h1>Card2</h1>
+            <h2>{props.name}</h2>
+            <p>{props.age}</p>
+          </div>
+        );
+      });
+
+      export default Card;
+      `,
+    });
+    expect(formatCode(propsSource)).toBe(expectedPropsSource);
+  });
+
+  it("해체된 객체 매개변수로 forwardRef를 사용하는 경우도 추출할 수 있어야 한다.", async () => {
+    const propsSource = extractComponentPropsType({
+      source: `
+      import React from 'react';
+
+      const Card = React.forwardRef<HTMLDivElement, { name: string; age: number; }>(({ name, age }, ref) => {
+        return (
+          <div ref={ref}>
+            <h1>Card2</h1>
+            <h2>{name}</h2>
+            <p>{age}</p>
+          </div>
+        );
+      });
+
+      export default Card;
+      `,
+    });
+    expect(formatCode(propsSource)).toBe(expectedPropsSource);
+  });
+
+  it("인터페이스로 정의된 props를 사용하는 forwardRef 컴포넌트의 props 타입을 추출해야 한다.", async () => {
+    const propsSource = extractComponentPropsType({
+      source: `
+      import React from 'react';
+
+      interface Props {
+        name: string;
+        age: number;
+      }
+
+      const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+        return (
+          <div ref={ref}>
+            <h1>Card2</h1>
+            <h2>{props.name}</h2>
+            <p>{props.age}</p>
+          </div>
+        );
+      });
+
+      export default Card;
+      `,
+    });
+    expect(formatCode(propsSource)).toBe(expectedPropsSource);
+  });
+
+  it("타입 별칭을 사용하는 forwardRef 컴포넌트의 props 타입을 추출해야 한다.", async () => {
+    const propsSource = extractComponentPropsType({
+      source: `
+      import React from 'react';
+
+      type Props = {
+        name: string;
+        age: number;
+      };
+
+      const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+        return (
+          <div ref={ref}>
+            <h1>Card2</h1>
+            <h2>{props.name}</h2>
+            <p>{props.age}</p>
+          </div>
+        );
+      });
+
+      export default Card;
+      `,
+    });
+    expect(formatCode(propsSource)).toBe(expectedPropsSource);
+  });
 });
