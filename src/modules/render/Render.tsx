@@ -1,18 +1,11 @@
-export interface RenderData {
-  id: string;
-  type: string;
-  props: Record<string, unknown>;
-  events?: Record<string, Record<string, unknown>>;
-  children?: RenderData[] | RenderData | undefined;
-}
-
-export async function Render(props: { renderValue?: RenderData }) {
+export async function Render(props: { renderValue?: RenderSchema }) {
   const { renderValue } = props;
   if (!renderValue) return null;
-  const RenderItem = (await import(`../component/${renderValue.type}`)).default;
+  const RenderItem = (await import(`@/modules/component/${renderValue.type}`))
+    .default;
   try {
-    const { children, props, events } = renderValue;
-    const renderItemProps = { ...props, events };
+    const { children, props } = renderValue;
+    const renderItemProps = { ...props };
     if (!children) {
       return <RenderItem {...renderItemProps} />;
     }

@@ -1,5 +1,5 @@
 "use client";
-import { useAction } from "@/core/hook/useAction";
+import { useAction } from "@/modules/core/hook/useAction";
 
 export default function ActionButton(props: {
   name: string;

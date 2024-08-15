@@ -1,5 +1,5 @@
 "use client";
-import { useEvents } from "@/core/hook/useEvents";
+import { useEvents } from "@/modules/core/hook/useEvents";
 
 export default function EventButton(props: {
   name: string;
