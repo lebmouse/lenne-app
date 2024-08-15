@@ -1,3 +1,5 @@
+import type { RenderSchema } from "../../../@types/render-schema";
+
 export async function Render(props: { renderValue?: RenderSchema }) {
   const { renderValue } = props;
   if (!renderValue) return null;
