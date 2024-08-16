@@ -38,13 +38,13 @@ const config: GenerateSchemaConfig = {
       tsconfig: "tsconfig.json",
       template: componentSchemaTemplate,
     },
-    // {
-    //   input: "src/modules/action/**/*.ts",
-    //   typeOutput: "src/schema/type/action.ts",
-    //   schemaOutput: "src/schema/action.json",
-    //   tsconfig: "tsconfig.json",
-    //   template: actionSchemaTemplate,
-    // },
+    {
+      input: "src/modules/action/**/*.ts",
+      typeOutput: "src/schema/type/action.ts",
+      schemaOutput: "src/schema/action.json",
+      tsconfig: "tsconfig.json",
+      template: actionSchemaTemplate,
+    },
   ],
 };
 export default config;

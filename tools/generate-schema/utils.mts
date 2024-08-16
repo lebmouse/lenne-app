@@ -89,18 +89,45 @@ typia.json.application<[${templateResult.exportName}]>();\n`
     }
     console.log(stdout);
   });
+  // tempOutputPath의 파일에서 위에 2줄만 제거하고, JSON.stringify로 변환해서 schemaOutput에 저장한다.
 
-  const result = await fs.readFile(path.resolve(cwd(), tempOutputPath), "utf8");
-  const jsonString = parseJsonString(result);
-  console.log(jsonString);
   try {
-    await fs.writeFile(
+    const tempOutputContent = await fs.readFile(
+      path.resolve(cwd(), tempOutputPath),
+      "utf8"
+    );
+    const parsedJsonString = parseJsonString(tempOutputContent);
+
+    await fs.writeJSON(
       path.resolve(cwd(), option.schemaOutput),
-      JSON.stringify(jsonString, null, 2)
+      convertStringToJson(parsedJsonString),
+      {
+        encoding: "utf8",
+      }
     );
   } catch (e) {
     console.log(e);
+  } finally {
+    await fs.remove(path.resolve(cwd(), path.dirname(tempInputPath)));
+    await fs.remove(path.resolve(cwd(), path.dirname(tempOutputPath)));
   }
+
+  // try {
+  //   const response = await import("../../src/schema/temp_schema/component.js");
+  //   console.log(response);
+  // } catch (e) {
+  //   console.error(e);
+  // }
+  // const result = await fs.readFile(path.resolve(cwd(), tempOutputPath), "utf8");
+  // const jsonString = parseJsonString(result);
+  // await fs.writeFile(
+  //   path.resolve(cwd(), option.schemaOutput),
+  //   JSON.stringify(jsonString, null, 2),
+  //   { encoding: "utf8" }
+  // );
+  // } catch (e) {
+  //   console.log(e);
+  // }
 }
 
 async function parseTsconfig(tsconfig: Tsconfig | string): Promise<Tsconfig> {
@@ -145,5 +172,22 @@ function parseJsonString(input: string): string {
   if (!matchString) {
     throw new Error("Error: No JSON object found in the input string.");
   }
-  return JSON.parse(matchString);
+
+  return matchString;
+}
+
+function convertStringToJson(input: string): any {
+  // 정규 표현식을 사용하여 키를 감싸는 작업
+  const fixedInput = input
+    .replace(/\$\s*ref/g, '"$ref"') // $ref를 "$ref"로 변환
+    .replace(/([a-zA-Z0-9_]+)(\s*):/g, '"$1":') // 따옴표 없는 키들을 감싸기
+    .replace(/\\"/g, '"'); // 이스케이프된 따옴표를 일반 따옴표로 변환
+  try {
+    // 수정된 문자열을 JSON으로 파싱
+    const jsonObject = JSON.parse(fixedInput);
+    return jsonObject;
+  } catch (error) {
+    console.error("JSON 변환 오류:", error);
+    return null;
+  }
 }
