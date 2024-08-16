@@ -1,6 +1,8 @@
-import { GenerateContext } from "./utils.mjs";
+import { GenerateContext, TemplateResult } from "./config.mjs";
 
-export async function componentSchemaTemplate(contexts: GenerateContext[]) {
+export async function componentSchemaTemplate(
+  contexts: GenerateContext[]
+): Promise<TemplateResult> {
   const componentImports = contexts
     .map(
       ({ importPath, baseName }) =>
@@ -26,15 +28,15 @@ ${componentImports}
 
 ${componentTypes}
 
-declare global {
-  type ComponentSchema = ${componentTypesUnion};
-}
+export type ComponentSchema = ${componentTypesUnion};
   `;
 
-  return resultSource;
+  return { source: resultSource, exportName: "ComponentSchema" };
 }
 
-export async function actionSchemaTemplate(contexts: GenerateContext[]) {
+export async function actionSchemaTemplate(
+  contexts: GenerateContext[]
+): Promise<TemplateResult> {
   const actionImports = contexts
     .map(
       ({ importPath, baseName }) =>
@@ -45,7 +47,7 @@ export async function actionSchemaTemplate(contexts: GenerateContext[]) {
   const actionTypes = contexts
     .map(
       ({ baseName }) =>
-        `interface ${baseName}Action { \n\ttype: "${baseName}";\n\toption: Parameters<typeof ${baseName}>[0]\n};`
+        `interface ${baseName}Action { \n\ttype: "${baseName}";\n\toption: Parameters<typeof ${baseName}>\n};`
     )
     .join("\n");
 
@@ -58,9 +60,8 @@ ${actionImports}
 
 ${actionTypes}
 
-declare global {
-type ActionSchema = ${actionTypeUnion};
-}
+export type ActionSchema = ${actionTypeUnion};
 `;
-  return resultSource;
+
+  return { source: resultSource, exportName: "ActionSchema" };
 }

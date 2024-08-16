@@ -23,17 +23,14 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "strictNullChecks": true,
-    "typeRoots": ["@types", "node_modules/@types"],
-    "types": ["component-schema", "action-schema", "render-schema"]
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "tools/**/*.mts",
-    "@types/**/*.d.ts"
+    "tools/**/*.mts"
   ],
   "exclude": ["node_modules"]
 }

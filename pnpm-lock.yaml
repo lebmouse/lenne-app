@@ -8,6 +8,12 @@ dependencies:
   '@adobe/react-spectrum':
     specifier: ^3.36.1
     version: 3.36.1(react-dom@18.3.1)(react@18.3.1)
+  '@modular-forms/react':
+    specifier: ^0.8.1
+    version: 0.8.1(@preact/signals-react@2.2.0)(react@18.3.1)(typescript@5.5.2)
+  '@preact/signals-react':
+    specifier: ^2.2.0
+    version: 2.2.0(react@18.3.1)
   es-toolkit:
     specifier: ^1.13.1
     version: 1.13.1
@@ -654,6 +660,19 @@ packages:
       - rollup
     dev: true
 
+  /@modular-forms/react@0.8.1(@preact/signals-react@2.2.0)(react@18.3.1)(typescript@5.5.2):
+    resolution: {integrity: sha512-0/xuGJ9JyjOWLC0Sw3XrfndUohMIzuBDD7wloilQWFDCUG3yKUNOn2XD8GOf+f1XemoTaPgACMGsa/5AtVlVuQ==}
+    peerDependencies:
+      '@preact/signals-react': ^1.0.0
+      react: ^18.0.0
+    dependencies:
+      '@preact/signals-react': 2.2.0(react@18.3.1)
+      react: 18.3.1
+      valibot: 0.37.0(typescript@5.5.2)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /@next/env@14.2.5:
     resolution: {integrity: sha512-/zZGkrTOsraVfYjGP8uM0p6r0BDT6xWpkjdVbcz66PJVSpwXX3yNiRycxAuDfBKGWBrZBXRuK/YVlkNgxHGwmA==}
     dev: false
@@ -772,6 +791,20 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@preact/signals-core@1.8.0:
+    resolution: {integrity: sha512-OBvUsRZqNmjzCZXWLxkZfhcgT+Fk8DDcT/8vD6a1xhDemodyy87UJRJfASMuSD8FaAIeGgGm85ydXhm7lr4fyA==}
+    dev: false
+
+  /@preact/signals-react@2.2.0(react@18.3.1):
+    resolution: {integrity: sha512-EPYlhXqqcOUxz2gTQGt4rtK6X7Jr04517DcJVZ4I5a7Gxy39haK24uFeVWtiU/tnEReRFcxpQN6poYra1jf68A==}
+    peerDependencies:
+      react: ^16.14.0 || 17.x || 18.x
+    dependencies:
+      '@preact/signals-core': 1.8.0
+      react: 18.3.1
+      use-sync-external-store: 1.2.2(react@18.3.1)
+    dev: false
 
   /@react-aria/actiongroup@3.7.7(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-qkbCnMYt32ZWN8X7ycup/kbdaQLENJ+uzy3gRI5VY06RwN+btdvT8seZl1xR0n7qfdDCZxmd5WaKbXA0gl3bBA==}
@@ -7135,6 +7168,17 @@ packages:
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
+
+  /valibot@0.37.0(typescript@5.5.2):
+    resolution: {integrity: sha512-FQz52I8RXgFgOHym3XHYSREbNtkgSjF9prvMFH1nBsRyfL6SfCzoT1GuSDTlbsuPubM7/6Kbw0ZMQb8A+V+VsQ==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.5.2
+    dev: false
 
   /vite-node@2.0.5(@types/node@20.14.14):
     resolution: {integrity: sha512-LdsW4pxj0Ot69FAoXZ1yTnA9bjGohr2yNBU7QKRxpz8ITSkhuDl6h3zS/tvgz4qrNjeRnvrWeXQ8ZF7Um4W00Q==}

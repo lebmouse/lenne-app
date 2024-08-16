@@ -1,4 +1,4 @@
-import type { RenderSchema } from "../../../@types/render-schema";
+import { RenderSchema } from "@/schema/render";
 
 export async function Render(props: { renderValue?: RenderSchema }) {
   const { renderValue } = props;

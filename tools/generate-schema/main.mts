@@ -1,26 +1,22 @@
-import path from "node:path";
-import { cwd } from "node:process";
-import { generateSchema, getTsconfig } from "./utils.mjs";
-import { actionSchemaTemplate, componentSchemaTemplate } from "./template.mjs";
+import { generateSchema } from "./utils.mjs";
+import config from "./config.mjs";
 
 (async function main() {
   try {
-    const tsconfig = await getTsconfig(path.resolve(cwd(), "tsconfig.json"));
-    await generateSchema({
-      input: "src/modules/component/**/*.tsx",
-      tsconfig,
-      output: "@types/component-schema/index.d.ts",
-      template: componentSchemaTemplate,
-    });
+    await Promise.allSettled(
+      config.options.map((option) =>
+        generateSchema(option)
+          .then((result) => {
+            console.log(`generated schema: ${option.typeOutput}`);
+            return result;
+          })
+          .catch((e) => {
+            throw e;
+          })
+      )
+    );
 
-    // action schema
-    await generateSchema({
-      input: "src/modules/action/**/*.ts",
-      tsconfig,
-      output: "@types/action-schema/index.d.ts",
-      template: actionSchemaTemplate,
-    });
-    console.log("done generating schema");
+    console.log("done all schema generation");
   } catch (e) {
     console.error(e);
   }
