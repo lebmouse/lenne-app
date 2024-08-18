@@ -2,7 +2,6 @@
 import componentJson from "@/schema/component.json";
 
 import { ComboBox, Item } from "@adobe/react-spectrum";
-import { useProxy } from "valtio/utils";
 import { componentFormProxy } from "./store";
 
 const schemas = componentJson.components.schemas;

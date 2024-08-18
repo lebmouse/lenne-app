@@ -46,7 +46,7 @@ export const actionSchemaTemplate: TemplateGenerator = async (contexts) => {
   const actionTypes = contexts
     .map(
       ({ baseName }) =>
-        `interface ${baseName}Action { \n\ttype: "${baseName}";\n\toption: Parameters<typeof ${baseName}>\n};`
+        `interface ${baseName}Action { \n\ttype: "${baseName}";\n\toption: FirstParameter<typeof ${baseName}>\n};`
     )
     .join("\n");
 
@@ -56,6 +56,8 @@ export const actionSchemaTemplate: TemplateGenerator = async (contexts) => {
 
   const resultSource = `
 ${actionImports}
+
+type FirstParameter<T> = T extends (...args: infer P) => any ? P[0] : undefined;
 
 ${actionTypes}
 
