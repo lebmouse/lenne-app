@@ -1,8 +1,6 @@
-import { GenerateContext, TemplateResult } from "./config.mjs";
+import { TemplateGenerator } from "./config.mjs";
 
-export async function componentSchemaTemplate(
-  contexts: GenerateContext[]
-): Promise<TemplateResult> {
+export const componentSchemaTemplate: TemplateGenerator = async (contexts) => {
   const componentImports = contexts
     .map(
       ({ importPath, baseName }) =>
@@ -23,20 +21,17 @@ export async function componentSchemaTemplate(
 
   const resultSource = `
 import type { ComponentProps } from 'react';
-
 ${componentImports}
 
 ${componentTypes}
 
 export type ComponentSchema = ${componentTypesUnion};
-  `;
+`;
 
   return { source: resultSource, exportName: "ComponentSchema" };
-}
+};
 
-export async function actionSchemaTemplate(
-  contexts: GenerateContext[]
-): Promise<TemplateResult> {
+export const actionSchemaTemplate: TemplateGenerator = async (contexts) => {
   const actionImports = contexts
     .map(
       ({ importPath, baseName }) =>
@@ -64,4 +59,4 @@ export type ActionSchema = ${actionTypeUnion};
 `;
 
   return { source: resultSource, exportName: "ActionSchema" };
-}
+};

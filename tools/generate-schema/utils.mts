@@ -105,29 +105,16 @@ typia.json.application<[${templateResult.exportName}]>();\n`
         encoding: "utf8",
       }
     );
+    return {
+      success: true,
+      context: {
+        tempInputPath,
+        tempOutputPath,
+      },
+    };
   } catch (e) {
     console.log(e);
-  } finally {
-    await fs.remove(path.resolve(cwd(), path.dirname(tempInputPath)));
-    await fs.remove(path.resolve(cwd(), path.dirname(tempOutputPath)));
   }
-
-  // try {
-  //   const response = await import("../../src/schema/temp_schema/component.js");
-  //   console.log(response);
-  // } catch (e) {
-  //   console.error(e);
-  // }
-  // const result = await fs.readFile(path.resolve(cwd(), tempOutputPath), "utf8");
-  // const jsonString = parseJsonString(result);
-  // await fs.writeFile(
-  //   path.resolve(cwd(), option.schemaOutput),
-  //   JSON.stringify(jsonString, null, 2),
-  //   { encoding: "utf8" }
-  // );
-  // } catch (e) {
-  //   console.log(e);
-  // }
 }
 
 async function parseTsconfig(tsconfig: Tsconfig | string): Promise<Tsconfig> {
@@ -137,13 +124,13 @@ async function parseTsconfig(tsconfig: Tsconfig | string): Promise<Tsconfig> {
   return tsconfig;
 }
 
-function createTempInputPath(originalPath: string) {
+export function createTempInputPath(originalPath: string) {
   const parsedPath = path.parse(originalPath);
 
   return path.join(parsedPath.dir, "..", "temp_template", parsedPath.base);
 }
 
-function createTempOutputPath(originalPath: string) {
+export function createTempOutputPath(originalPath: string) {
   const parsedPath = path.parse(originalPath);
 
   return path.join(parsedPath.dir, "..", "temp_schema", parsedPath.base);

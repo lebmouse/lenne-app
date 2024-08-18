@@ -1,13 +1,25 @@
-import { ComponentSchema } from "@/schema/type/component";
-import typia from "typia";
+import componentJson from "../../schema/component.json";
 
-const componentSchema = typia.json.application<[ComponentSchema]>();
 export default function AdminPage() {
   return (
-    <div>
-      <JsonViewer value={componentSchema} />
+    <div style={{ display: "flex" }}>
+      <LeftPanel />
+      <PreviewPanel />
+      <RightPanel />
     </div>
   );
+}
+
+function LeftPanel() {
+  return <div style={{ flex: "1" }}>Left Panel</div>;
+}
+
+function PreviewPanel() {
+  return <div style={{ flex: "2" }}>Preview Panel</div>;
+}
+
+function RightPanel() {
+  return <div style={{ flex: "1" }}>Right Panel</div>;
 }
 
 function JsonViewer(props: { value: unknown }) {

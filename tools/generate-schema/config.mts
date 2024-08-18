@@ -15,13 +15,15 @@ export type TemplateResult = {
   exportName: string;
 };
 
+export type TemplateGenerator = (
+  contexts: GenerateContext[]
+) => Promise<TemplateResult> | TemplateResult;
+
 export type GenerateSchemaOption = {
   input: string;
   typeOutput: string;
   schemaOutput: string;
-  template: (
-    contexts: GenerateContext[]
-  ) => Promise<TemplateResult> | TemplateResult;
+  template: TemplateGenerator;
   tsconfig: Tsconfig | string;
 };
 
