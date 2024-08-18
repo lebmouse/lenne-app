@@ -13,15 +13,14 @@
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.36.1",
-    "@modular-forms/react": "^0.8.1",
-    "@preact/signals-react": "^2.2.0",
     "@types/json-schema": "^7.0.15",
     "es-toolkit": "^1.13.1",
     "nanoid": "^5.0.7",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "typia": "^6.8.0"
+    "typia": "^6.8.0",
+    "valtio": "^1.13.2"
   },
   "devDependencies": {
     "@babel/parser": "^7.25.3",

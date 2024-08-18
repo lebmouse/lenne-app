@@ -25,6 +25,10 @@ ${componentImports}
 
 ${componentTypes}
 
+/**
+ * @title component-type
+ * @description 컴포넌트를 선택하는 스키마입니다.
+ */
 export type ComponentSchema = ${componentTypesUnion};
 `;
 

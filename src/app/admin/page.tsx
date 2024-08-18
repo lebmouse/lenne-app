@@ -1,25 +1,27 @@
-import componentJson from "../../schema/component.json";
+import { LeftPanel } from "./LeftPanel";
+import { RightPanel } from "./RightPanel";
 
 export default function AdminPage() {
   return (
-    <div style={{ display: "flex" }}>
-      <LeftPanel />
-      <PreviewPanel />
-      <RightPanel />
+    <div>
+      <h1>AdminPage</h1>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "30% 30% 30%",
+          gap: "16px",
+        }}
+      >
+        <LeftPanel />
+        <PreviewPanel />
+        <RightPanel />
+      </div>
     </div>
   );
 }
 
-function LeftPanel() {
-  return <div style={{ flex: "1" }}>Left Panel</div>;
-}
-
 function PreviewPanel() {
   return <div style={{ flex: "2" }}>Preview Panel</div>;
-}
-
-function RightPanel() {
-  return <div style={{ flex: "1" }}>Right Panel</div>;
 }
 
 function JsonViewer(props: { value: unknown }) {

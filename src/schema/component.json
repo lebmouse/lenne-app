@@ -1,1 +1,87 @@
-{"version":"3.1","components":{"schemas":{"ComponentSchema":{"oneOf":[{"$ref":"#/components/schemas/CardComponent"},{"$ref":"#/components/schemas/EventButtonComponent"},{"$ref":"#/components/schemas/InputComponent"}],"discriminator":{"propertyName":"type","mapping":{"Card":"#/components/schemas/CardComponent","EventButton":"#/components/schemas/EventButtonComponent","Input":"#/components/schemas/InputComponent"}}},"CardComponent":{"type":"object","properties":{"type":{"const":"Card"},"props":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"]}},"required":["type","props"]},"EventButtonComponent":{"type":"object","properties":{"type":{"const":"EventButton"},"props":{"type":"object","properties":{"name":{"type":"string"},"events":{"type":"object","properties":{"onClick":{"type":"object","properties":{"name":{"type":"string"},"option":{}},"required":["name"]},"onMouseOver":{"type":"object","properties":{"name":{"type":"string"},"option":{}},"required":["name"]}}}},"required":["name"]}},"required":["type","props"]},"InputComponent":{"type":"object","properties":{"type":{"const":"Input"},"props":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"]}},"required":["type","props"]}}},"schemas":[{"$ref":"#/components/schemas/ComponentSchema"}]}
+{
+  "version": "3.1",
+  "components": {
+    "schemas": {
+      "ComponentSchema": {
+        "oneOf": [
+          { "$ref": "#/components/schemas/CardComponent" },
+          { "$ref": "#/components/schemas/EventButtonComponent" },
+          { "$ref": "#/components/schemas/InputComponent" }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "Card": "#/components/schemas/CardComponent",
+            "EventButton": "#/components/schemas/EventButtonComponent",
+            "Input": "#/components/schemas/InputComponent"
+          }
+        },
+        "title": "component-type",
+        "description": "컴포넌트를선택하는스키마입니다."
+      },
+      "CardComponent": {
+        "type": "object",
+        "properties": {
+          "type": { "const": "Card" },
+          "props": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "age": { "type": "number" }
+            },
+            "required": ["name", "age"]
+          }
+        },
+        "required": ["type", "props"]
+      },
+      "EventButtonComponent": {
+        "type": "object",
+        "properties": {
+          "type": { "const": "EventButton" },
+          "props": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "events": {
+                "type": "object",
+                "properties": {
+                  "onClick": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "option": {}
+                    },
+                    "required": ["name"]
+                  },
+                  "onMouseOver": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "option": {}
+                    },
+                    "required": ["name"]
+                  }
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        },
+        "required": ["type", "props"]
+      },
+      "InputComponent": {
+        "type": "object",
+        "properties": {
+          "type": { "const": "Input" },
+          "props": {
+            "type": "object",
+            "properties": { "name": { "type": "string" } },
+            "required": ["name"]
+          }
+        },
+        "required": ["type", "props"]
+      }
+    }
+  },
+  "schemas": [{ "$ref": "#/components/schemas/ComponentSchema" }]
+}
