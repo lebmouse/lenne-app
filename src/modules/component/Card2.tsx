@@ -1,4 +1,4 @@
-export default function Card({
+export default function Card2({
   name,
   age,
 }: {

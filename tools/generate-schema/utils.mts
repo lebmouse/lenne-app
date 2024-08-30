@@ -171,6 +171,7 @@ function convertStringToJson(input: string): any {
     .replace(/\\"/g, '"'); // 이스케이프된 따옴표를 일반 따옴표로 변환
   try {
     // 수정된 문자열을 JSON으로 파싱
+    // console.log(fixedInput);
     const jsonObject = JSON.parse(fixedInput);
     return jsonObject;
   } catch (error) {

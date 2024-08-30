@@ -1,6 +1,8 @@
 import { TemplateGenerator } from "./config.mjs";
 
 export const componentSchemaTemplate: TemplateGenerator = async (contexts) => {
+  const RenderItemProps = "RenderItemProps";
+
   const componentImports = contexts
     .map(
       ({ importPath, baseName }) =>
@@ -20,7 +22,8 @@ export const componentSchemaTemplate: TemplateGenerator = async (contexts) => {
     .join(" | ");
 
   const resultSource = `
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from "react";
+
 ${componentImports}
 
 ${componentTypes}
