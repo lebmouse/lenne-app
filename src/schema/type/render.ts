@@ -1,5 +1,12 @@
 import { ComponentSchema } from "./component";
 
+export type BasicRenderSchema = {
+  id: string;
+  type: string;
+  props: Record<string, unknown>;
+  children?: BasicRenderSchema[] | BasicRenderSchema;
+};
+
 // RenderComponent 사용하는 렌더링 데이터
 export type RenderSchema = {
   id: string;
@@ -22,6 +29,16 @@ export type TreeNode = {
  * };
  */
 export type TreeRecord = Record<string, TreeNode>;
+
+export type TreeViewItem = {
+  id: string;
+  name: string;
+  children?: TreeViewItem[];
+};
+
+export type TreeViewData = TreeViewItem[];
+
+export type BasicRenderRecord = Record<string, BasicRenderSchema>;
 
 /**
  *  @example

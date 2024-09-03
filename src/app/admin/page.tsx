@@ -1,5 +1,6 @@
-import { LeftPanel } from "./LeftPanel";
-import { RightPanel } from "./RightPanel";
+import { SelectComponent } from "./SelectComponent";
+import { ComponentForm } from "./RightPanel";
+import { TreeContainer } from "./TreeContainer";
 
 export default function AdminPage() {
   return (
@@ -12,9 +13,12 @@ export default function AdminPage() {
           gap: "16px",
         }}
       >
-        <LeftPanel />
+        <section>
+          <SelectComponent />
+          <TreeContainer />
+        </section>
         <PreviewPanel />
-        <RightPanel />
+        <ComponentForm />
       </div>
     </div>
   );

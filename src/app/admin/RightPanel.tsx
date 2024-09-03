@@ -1,7 +1,6 @@
 "use client";
-import { JSONSchema7, JSONSchema7Object } from "json-schema";
-import { componentFormProxy, resolveRef } from "./store";
-import { useSnapshot } from "valtio";
+import { JSONSchema7 } from "json-schema";
+import { resolveRef } from "./store";
 import {
   Button,
   ComboBox,
@@ -11,12 +10,11 @@ import {
   Text,
   TextField,
 } from "@adobe/react-spectrum";
-import { is, validate } from "typia";
+import { validate } from "typia";
 import schemas from "@/schema/action.json";
 import { useState } from "react";
 
-export function RightPanel() {
-  const { schemas } = useSnapshot(componentFormProxy);
+export function ComponentForm() {
   if (schemas === undefined) {
     return <div>empty</div>;
   }

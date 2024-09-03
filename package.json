@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.36.1",
+    "@legendapp/state": "3.0.0-alpha.32",
     "@types/json-schema": "^7.0.15",
     "ajv": "^8.17.1",
     "es-toolkit": "^1.13.1",
     "nanoid": "^5.0.7",
     "next": "14.2.5",
     "react": "^18",
+    "react-arborist": "^3.4.0",
     "react-dom": "^18",
     "typia": "^6.8.0",
     "valtio": "^1.13.2"
