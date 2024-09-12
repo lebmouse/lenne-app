@@ -9,10 +9,11 @@
     "lint": "next lint",
     "test": "vitest",
     "gen-schema": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"ts-node/esm\", pathToFileURL(\"./\"));' tools/generate-schema/main.mts",
-    "prepare": "ts-patch install && typia patch"
+    "prepare": "ts-patch install && typia patch && panda codegen"
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.36.1",
+    "@ark-ui/react": "^3.11.1",
     "@legendapp/state": "3.0.0-alpha.32",
     "@types/json-schema": "^7.0.15",
     "ajv": "^8.17.1",
@@ -27,6 +28,8 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.25.3",
+    "@pandacss/dev": "^0.46.0",
+    "@park-ui/panda-preset": "^0.42.0",
     "@ryoppippi/unplugin-typia": "npm:@jsr/ryoppippi__unplugin-typia@^0.6.18",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20",
