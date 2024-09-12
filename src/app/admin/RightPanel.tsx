@@ -10,7 +10,7 @@ import {
   Text,
   TextField,
 } from "@adobe/react-spectrum";
-import { validate } from "typia";
+// import { validate } from "typia";
 import schemas from "@/schema/action.json";
 import { useState } from "react";
 
@@ -18,28 +18,28 @@ export function ComponentForm() {
   if (schemas === undefined) {
     return <div>empty</div>;
   }
-  const validated = validate<{
-    type: "object";
-    properties: {
-      type: { const: string };
-      props: JSONSchema7;
-    };
-  }>(schemas);
+  // const validated = validate<{
+  //   type: "object";
+  //   properties: {
+  //     type: { const: string };
+  //     props: JSONSchema7;
+  //   };
+  // }>(schemas);
 
-  if (validated.success) {
-    return (
-      <div>
-        <Form>
-          <Text>{validated.data.properties.type.const}</Text>
-          <Field schema={validated.data.properties.props} propsName="" />
-          <Button variant="cta">저장</Button>
-        </Form>
-      </div>
-    );
-  }
-  if (validated.errors) {
-    return <div> {JSON.stringify(validated.errors)}</div>;
-  }
+  // if (validated.success) {
+  //   return (
+  //     <div>
+  //       <Form>
+  //         <Text>{validated.data.properties.type.const}</Text>
+  //         <Field schema={validated.data.properties.props} propsName="" />
+  //         <Button variant="cta">저장</Button>
+  //       </Form>
+  //     </div>
+  //   );
+  // }
+  // if (validated.errors) {
+  //   return <div> {JSON.stringify(validated.errors)}</div>;
+  // }
 
   return (
     <div>
@@ -113,11 +113,11 @@ function EventForm() {
           schemas.components.schemas.ActionSchema.discriminator.mapping
         ).map(([name, $ref]) => ({ id: $ref, name }))}
         onSelectionChange={(key) => {
-          if (typeof key === "string") {
-            const resovedSchema = resolveRef(key, schemas);
-            setField(resovedSchema);
-            setKey(key);
-          }
+          // if (typeof key === "string") {
+          //   const resovedSchema = resolveRef(key, schemas);
+          //   setField(resovedSchema);
+          //   setKey(key);
+          // }
         }}
       >
         {(item) => <Item key={item.id}>{item.name}</Item>}

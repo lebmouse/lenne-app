@@ -8,7 +8,8 @@
           { "$ref": "#/components/schemas/Card2Component" },
           { "$ref": "#/components/schemas/ContainerComponent" },
           { "$ref": "#/components/schemas/EventButtonComponent" },
-          { "$ref": "#/components/schemas/InputComponent" }
+          { "$ref": "#/components/schemas/InputComponent" },
+          { "$ref": "#/components/schemas/TwoChildernComponent" }
         ],
         "discriminator": {
           "propertyName": "type",
@@ -17,7 +18,8 @@
             "Card2": "#/components/schemas/Card2Component",
             "Container": "#/components/schemas/ContainerComponent",
             "EventButton": "#/components/schemas/EventButtonComponent",
-            "Input": "#/components/schemas/InputComponent"
+            "Input": "#/components/schemas/InputComponent",
+            "TwoChildern": "#/components/schemas/TwoChildernComponent"
           }
         },
         "title": "component-type",
@@ -62,119 +64,13 @@
           "props": {
             "type": "object",
             "properties": {
-              "children": {
-                "oneOf": [
-                  { "type": "string", "x-render-item": "RenderItemRef" },
-                  { "type": "number", "x-render-item": "RenderItemRef" },
-                  { "type": "boolean", "x-render-item": "RenderItemRef" },
-                  {
-                    "$ref": "#/components/schemas/ReactElementanystringJSXElementConstructoranyReactNodeTag"
-                  },
-                  {
-                    "$ref": "#/components/schemas/IterableReactNodeReactNodeTag"
-                  },
-                  { "$ref": "#/components/schemas/ReactPortalReactNodeTag" }
-                ]
-              },
+              "children": { "$ref": "#/components/schemas/React.ReactNode" },
               "title": { "type": "string" },
               "description": { "type": "string" }
             }
           }
         },
         "required": ["type", "props"]
-      },
-      "ReactElementanystringJSXElementConstructoranyReactNodeTag": {
-        "type": "object",
-        "properties": {
-          "type": { "type": "string" },
-          "props": {},
-          "key": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
-          "typia.tag": {
-            "type": "object",
-            "properties": {
-              "target": {
-                "oneOf": [
-                  { "const": "string" },
-                  { "const": "number" },
-                  { "const": "bigint" },
-                  { "const": "boolean" },
-                  { "const": "array" }
-                ]
-              },
-              "kind": { "const": "jsonPlugin" },
-              "schema": {
-                "type": "object",
-                "properties": { "x-render-item": { "const": "RenderItemRef" } },
-                "required": ["x-render-item"]
-              }
-            },
-            "required": ["target", "kind", "schema"],
-            "title": "Thisisadummypropertyforcompilation",
-            "description": "Thisisadummypropertyforcompilation.\n\nItdoesnotmeananythinginruntime."
-          }
-        },
-        "required": ["type", "props", "key"]
-      },
-      "IterableReactNodeReactNodeTag": {
-        "type": "object",
-        "properties": {
-          "typia.tag": {
-            "type": "object",
-            "properties": {
-              "target": {
-                "oneOf": [
-                  { "const": "string" },
-                  { "const": "number" },
-                  { "const": "bigint" },
-                  { "const": "boolean" },
-                  { "const": "array" }
-                ]
-              },
-              "kind": { "const": "jsonPlugin" },
-              "schema": {
-                "type": "object",
-                "properties": { "x-render-item": { "const": "RenderItemRef" } },
-                "required": ["x-render-item"]
-              }
-            },
-            "required": ["target", "kind", "schema"],
-            "title": "Thisisadummypropertyforcompilation",
-            "description": "Thisisadummypropertyforcompilation.\n\nItdoesnotmeananythinginruntime."
-          }
-        }
-      },
-      "ReactPortalReactNodeTag": {
-        "type": "object",
-        "properties": {
-          "children": { "$ref": "#/components/schemas/React.ReactNode" },
-          "type": { "type": "string" },
-          "props": {},
-          "key": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
-          "typia.tag": {
-            "type": "object",
-            "properties": {
-              "target": {
-                "oneOf": [
-                  { "const": "string" },
-                  { "const": "number" },
-                  { "const": "bigint" },
-                  { "const": "boolean" },
-                  { "const": "array" }
-                ]
-              },
-              "kind": { "const": "jsonPlugin" },
-              "schema": {
-                "type": "object",
-                "properties": { "x-render-item": { "const": "RenderItemRef" } },
-                "required": ["x-render-item"]
-              }
-            },
-            "required": ["target", "kind", "schema"],
-            "title": "Thisisadummypropertyforcompilation",
-            "description": "Thisisadummypropertyforcompilation.\n\nItdoesnotmeananythinginruntime."
-          }
-        },
-        "required": ["children", "type", "props", "key"]
       },
       "React.ReactNode": {
         "oneOf": [
@@ -255,6 +151,20 @@
             "type": "object",
             "properties": { "name": { "type": "string" } },
             "required": ["name"]
+          }
+        },
+        "required": ["type", "props"]
+      },
+      "TwoChildernComponent": {
+        "type": "object",
+        "properties": {
+          "type": { "const": "TwoChildern" },
+          "props": {
+            "type": "object",
+            "properties": {
+              "children": { "$ref": "#/components/schemas/React.ReactNode" },
+              "twoChildren": { "$ref": "#/components/schemas/React.ReactNode" }
+            }
           }
         },
         "required": ["type", "props"]

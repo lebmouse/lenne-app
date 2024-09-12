@@ -1,8 +1,10 @@
-import { ReactNodeTag } from "@/typia/tags";
 import { ReactNode } from "react";
 
 export default function Container(props: {
-  children?: ReactNode & ReactNodeTag;
+  /**
+   * @type {ReactNode}
+   */
+  children?: ReactNode;
   title?: string;
   description?: string;
 }) {

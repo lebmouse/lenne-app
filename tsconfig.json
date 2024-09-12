@@ -21,7 +21,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "styled-system/*": ["./styled-system/*"]
     },
     "strictNullChecks": true
   },

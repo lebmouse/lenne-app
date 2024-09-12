@@ -1,18 +1,8 @@
 "use client";
 import componentJson from "@/schema/component.json";
-
-import {
-  ActionButton,
-  ActionGroup,
-  Button,
-  ComboBox,
-  Flex,
-  Grid,
-  Item,
-  ListView,
-  View,
-} from "@adobe/react-spectrum";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { admin$ } from "./store";
+import { Select } from "@/park/select";
 
 const schemas = componentJson.components.schemas;
 
@@ -23,18 +13,33 @@ const items = Object.entries(schemas.ComponentSchema.discriminator.mapping).map(
 export function SelectComponent() {
   return (
     <section>
-      <ComboBox
-        label={schemas.ComponentSchema.title}
-        items={items}
-        onSelectionChange={(id) => {
-          if (typeof id === "string") {
-            admin$.addTreeItem(null, id);
-          }
-        }}
-      >
-        {(item) => <Item key={item.id}>{item.name}</Item>}
-      </ComboBox>
-      <ActionGroup
+      <Select.Root positioning={{ sameWidth: true }} width="2xs" items={items}>
+        <Select.Label>{schemas.ComponentSchema.title}</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select a Framework" />
+            <ChevronsUpDownIcon />
+          </Select.Trigger>
+        </Select.Control>
+        <Select.Positioner>
+          <Select.Content>
+            <Select.ItemGroup>
+              <Select.ItemGroupLabel>
+                {schemas.ComponentSchema.title}
+              </Select.ItemGroupLabel>
+              {items.map((item) => (
+                <Select.Item key={item.id} item={item}>
+                  <Select.ItemText>{item.name}</Select.ItemText>
+                  <Select.ItemIndicator>
+                    <CheckIcon />
+                  </Select.ItemIndicator>
+                </Select.Item>
+              ))}
+            </Select.ItemGroup>
+          </Select.Content>
+        </Select.Positioner>
+      </Select.Root>
+      {/* <ActionGroup
         items={items}
         UNSAFE_style={{
           display: "grid",
@@ -42,13 +47,14 @@ export function SelectComponent() {
           gap: "1rem",
         }}
         onAction={(id) => {
+          console.log(id);
           if (typeof id === "string") {
             admin$.addTreeItem(null, id);
           }
         }}
       >
         {(item) => <Item key={item.id}>{item.name}</Item>}
-      </ActionGroup>
+      </ActionGroup> */}
     </section>
   );
 }

@@ -1,11 +1,15 @@
 import { SelectComponent } from "./SelectComponent";
 import { ComponentForm } from "./RightPanel";
 import { TreeContainer } from "./TreeContainer";
+import { css } from "../../../styled-system/css";
 
 export default function AdminPage() {
   return (
     <div>
       <h1>AdminPage</h1>
+      <div className={css({ fontSize: "2xl", fontWeight: "bold" })}>
+        Hello 🐼!
+      </div>
       <div
         style={{
           display: "grid",

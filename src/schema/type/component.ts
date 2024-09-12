@@ -6,6 +6,7 @@ import type Card2 from '@/modules/component/Card2';
 import type Container from '@/modules/component/Container';
 import type EventButton from '@/modules/component/EventButton';
 import type Input from '@/modules/component/Input';
+import type TwoChildern from '@/modules/component/TwoChildern';
 
 interface CardComponent { 
 	type: "Card";
@@ -27,9 +28,13 @@ interface InputComponent {
 	type: "Input";
 	props: ComponentProps<typeof Input>
 };
+interface TwoChildernComponent { 
+	type: "TwoChildern";
+	props: ComponentProps<typeof TwoChildern>
+};
 
 /**
  * @title component-type
  * @description 컴포넌트를 선택하는 스키마입니다.
  */
-export type ComponentSchema = CardComponent | Card2Component | ContainerComponent | EventButtonComponent | InputComponent;
+export type ComponentSchema = CardComponent | Card2Component | ContainerComponent | EventButtonComponent | InputComponent | TwoChildernComponent;
