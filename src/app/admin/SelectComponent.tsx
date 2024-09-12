@@ -3,6 +3,9 @@ import componentJson from "@/schema/component.json";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { admin$ } from "./store";
 import { Select } from "@/park/select";
+import { useState } from "react";
+import { Button } from "@/park/button";
+import { Flex, Grid } from "styled-system/jsx";
 
 const schemas = componentJson.components.schemas;
 
@@ -11,9 +14,17 @@ const items = Object.entries(schemas.ComponentSchema.discriminator.mapping).map(
 );
 
 export function SelectComponent() {
+  const [value, setValue] = useState<string[]>([]);
   return (
-    <section>
-      <Select.Root positioning={{ sameWidth: true }} width="2xs" items={items}>
+    <Flex gap="2" direction={"column"}>
+      <Select.Root
+        items={items}
+        value={value}
+        onValueChange={(details) => {
+          setValue(details.value);
+        }}
+        positioning={{ sameWidth: true }}
+      >
         <Select.Label>{schemas.ComponentSchema.title}</Select.Label>
         <Select.Control>
           <Select.Trigger>
@@ -24,11 +35,8 @@ export function SelectComponent() {
         <Select.Positioner>
           <Select.Content>
             <Select.ItemGroup>
-              <Select.ItemGroupLabel>
-                {schemas.ComponentSchema.title}
-              </Select.ItemGroupLabel>
               {items.map((item) => (
-                <Select.Item key={item.id} item={item}>
+                <Select.Item key={item.id} item={item.id}>
                   <Select.ItemText>{item.name}</Select.ItemText>
                   <Select.ItemIndicator>
                     <CheckIcon />
@@ -39,22 +47,19 @@ export function SelectComponent() {
           </Select.Content>
         </Select.Positioner>
       </Select.Root>
-      {/* <ActionGroup
-        items={items}
-        UNSAFE_style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-        onAction={(id) => {
-          console.log(id);
-          if (typeof id === "string") {
-            admin$.addTreeItem(null, id);
-          }
-        }}
-      >
-        {(item) => <Item key={item.id}>{item.name}</Item>}
-      </ActionGroup> */}
-    </section>
+      <Grid gridTemplateColumns={"3"} gap="2">
+        {items.map((item) => (
+          <Button
+            key={item.id}
+            variant="outline"
+            onClick={() => {
+              admin$.addTreeItem(null, item.id);
+            }}
+          >
+            {item.name}
+          </Button>
+        ))}
+      </Grid>
+    </Flex>
   );
 }

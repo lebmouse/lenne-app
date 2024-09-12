@@ -2,29 +2,23 @@ import { SelectComponent } from "./SelectComponent";
 import { ComponentForm } from "./RightPanel";
 import { TreeContainer } from "./TreeContainer";
 import { css } from "../../../styled-system/css";
+import { Resizer } from "./Splilter";
+import { Box, VStack } from "styled-system/jsx";
 
 export default function AdminPage() {
   return (
-    <div>
-      <h1>AdminPage</h1>
-      <div className={css({ fontSize: "2xl", fontWeight: "bold" })}>
-        Hello 🐼!
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "30% 30% 30%",
-          gap: "16px",
-        }}
-      >
-        <section>
-          <SelectComponent />
-          <TreeContainer />
-        </section>
-        <PreviewPanel />
-        <ComponentForm />
-      </div>
-    </div>
+    <Box h="100vh">
+      <Resizer
+        leftPannel={
+          <section>
+            <SelectComponent />
+            <TreeContainer />
+          </section>
+        }
+        centerPannel={<PreviewPanel />}
+        rightPannel={<ComponentForm />}
+      />
+    </Box>
   );
 }
 
