@@ -3,9 +3,12 @@ import componentJson from "@/schema/component.json";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { admin$ } from "./store";
 import { Select } from "@/park/select";
-import { useState } from "react";
 import { Button } from "@/park/button";
 import { Flex, Grid } from "styled-system/jsx";
+// import { observable } from "@legendapp/state";
+// import { enableReactComponents } from "@legendapp/state/config/enableReactComponents";
+
+// enableReactComponents();
 
 const schemas = componentJson.components.schemas;
 
@@ -13,15 +16,17 @@ const items = Object.entries(schemas.ComponentSchema.discriminator.mapping).map(
   ([name, $ref]) => ({ id: $ref, name })
 );
 
-export function SelectComponent() {
-  const [value, setValue] = useState<string[]>([]);
+export const SelectComponent = function SelectComponent() {
+  // const [value, setValue] = useState<string[]>([]);
+  const hasSelectedHasChildren = admin$.selectedHasChildren.get();
   return (
     <Flex gap="2" direction={"column"}>
       <Select.Root
         items={items}
-        value={value}
+        // value={value}
         onValueChange={(details) => {
-          setValue(details.value);
+          const [id] = details.value;
+          admin$.addTreeItem(null, id);
         }}
         positioning={{ sameWidth: true }}
       >
@@ -53,7 +58,14 @@ export function SelectComponent() {
             key={item.id}
             variant="outline"
             onClick={() => {
-              admin$.addTreeItem(null, item.id);
+              const selectedHasChildren = admin$.selectedHasChildren.get();
+              const selectedId = admin$.selectedId.get();
+              console.log({ selectedHasChildren, selectedId });
+              if (selectedHasChildren && selectedId) {
+                admin$.addTreeItem(selectedId, item.id);
+              } else {
+                admin$.addTreeItem(null, item.id);
+              }
             }}
           >
             {item.name}
@@ -62,4 +74,4 @@ export function SelectComponent() {
       </Grid>
     </Flex>
   );
-}
+};

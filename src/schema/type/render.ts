@@ -2,15 +2,16 @@ import { ComponentSchema } from "./component";
 
 export type BasicRenderSchema = {
   id: string;
+  name: string;
   type: string;
   props: Record<string, unknown>;
-  children?: BasicRenderSchema[] | BasicRenderSchema;
+  children?: BasicRenderSchema[];
 };
 
 // RenderComponent 사용하는 렌더링 데이터
 export type RenderSchema = {
   id: string;
-  children?: RenderSchema[] | RenderSchema;
+  children?: RenderSchema[];
 } & ComponentSchema;
 
 export type TreeNode = {

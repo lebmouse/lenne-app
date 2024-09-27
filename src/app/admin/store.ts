@@ -3,89 +3,108 @@ import componentJson from "@/schema/component.json";
 import {
   BasicRenderRecord,
   BasicRenderSchema,
-  RenderRecord,
-  RenderSchema,
   TreeRecord,
   TreeViewData,
   TreeViewItem,
 } from "@/schema/type/render";
 import { observable } from "@legendapp/state";
 import { nanoid } from "nanoid";
-import { SimpleTreeData } from "react-arborist";
 
 export const admin$ = observable<{
   selectedId: string | null;
+  selectedIds: string[];
   treeRecord: TreeRecord;
+  selectedHasChildren: boolean;
   renderRecord: BasicRenderRecord;
   treeView: TreeViewData;
   renderSchema: BasicRenderSchema | null;
   addTreeItem: (parentId: string | null, id: string) => void;
 }>({
   selectedId: null,
+  selectedIds: [],
   treeRecord: {},
+  selectedHasChildren: () => {
+    const selectedId = admin$.selectedId.get();
+    if (!selectedId) return false;
+    const renderItem = admin$.renderRecord[selectedId].children.get();
+    if (renderItem instanceof Array) return true;
+    return false;
+  },
   treeView: () => {
     const treeRecord = admin$.treeRecord.get();
     const renderRecord = admin$.renderRecord.get();
     const rootIds = Object.values(treeRecord)
       .filter((node) => node.parentId === null)
       .map((node) => node.id);
-    const createTreeView = (id: string): TreeViewItem => {
-      const node = treeRecord[id];
-      return {
-        id: node.id,
-        name: renderRecord[node.id].type,
-        children: node.childrenIds.map(createTreeView),
-      };
+    const createTreeView = (id: string): TreeViewItem | undefined => {
+      const treeNode = treeRecord[id];
+      const renderNode = renderRecord?.[id];
+      if (renderNode) {
+        return {
+          id: id,
+          name: renderNode.name,
+          children: treeNode?.childrenIds
+            ?.map(createTreeView)
+            .filter((item) => item !== undefined),
+        };
+      }
     };
-    return rootIds.map(createTreeView);
+    return rootIds
+      .map(createTreeView)
+      .filter((item) => item !== undefined) as TreeViewData;
   },
-
   renderSchema: null,
   renderRecord: {},
   addTreeItem(parentId, schemaRef) {
     const id = nanoid(4);
     const componentSchema = resolveRef(schemaRef, componentJson);
+
     admin$.renderRecord[id].assign({
       id: id,
-      type: componentSchema.properties.type.const,
+      name: componentSchema.properties.type.const,
       props: componentSchema.properties.props,
     });
 
     const childrenIds = Object.entries(
       componentSchema.properties.props.properties
-    ).reduce<(SimpleTreeData & { type?: "ReactNode" })[]>(
-      (acc, [propsName, propsValue]) => {
-        if (
-          propsValue &&
-          typeof propsValue === "object" &&
-          "$ref" in propsValue &&
-          typeof propsValue.$ref === "string" &&
-          propsValue.$ref === "#/components/schemas/React.ReactNode"
-        ) {
-          acc.push({
-            id: nanoid(4),
-            name: propsName,
-            children: [],
-            type: "ReactNode",
-          });
-        }
-        return acc;
-      },
-      []
-    );
-    console.log(childrenIds);
-
-    // if (parentId === null) {
-    //   admin$.treeRecord[id].assign({ id: id, parentId, childrenIds });
-    // } else {
-    //   admin$.treeRecord[parentId].childrenIds.push(id);
-    //   admin$.treeRecord[id].assign({ id: id, parentId, childrenIds: [] });
-    // }
+    ).reduce<string[]>((acc, [propsName, propsValue]) => {
+      if (
+        propsValue &&
+        typeof propsValue === "object" &&
+        "$ref" in propsValue &&
+        typeof propsValue.$ref === "string" &&
+        propsValue.$ref === "#/components/schemas/React.ReactNode"
+      ) {
+        const childrenId = nanoid(4);
+        acc.push(childrenId);
+        admin$.renderRecord[childrenId].assign({
+          id: childrenId,
+          name: propsName,
+          type: "ReactNode",
+          children: [],
+        });
+        admin$.treeRecord[childrenId].assign({
+          id: childrenId,
+          parentId: id,
+          childrenIds: [],
+        });
+      }
+      return acc;
+    }, []);
+    if (parentId === null) {
+      admin$.treeRecord[id].assign({
+        id: id,
+        parentId,
+        childrenIds: childrenIds.length > 0 ? childrenIds : undefined,
+      });
+    } else {
+      admin$.treeRecord[parentId].childrenIds.push(id);
+    }
   },
 });
 
-admin$.onChange((state) => {
-  console.log(state.value);
+admin$.onChange((args) => {
+  console.log(args.value);
 });
 
 interface ComponentSchema {

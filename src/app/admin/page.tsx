@@ -2,7 +2,7 @@ import { SelectComponent } from "./SelectComponent";
 import { ComponentForm } from "./RightPanel";
 import { TreeContainer } from "./TreeContainer";
 import { css } from "../../../styled-system/css";
-import { Resizer } from "./Splilter";
+import { Resizer } from "./Resizer";
 import { Box, VStack } from "styled-system/jsx";
 
 export default function AdminPage() {
