@@ -17,13 +17,17 @@ export const TreeContainer = observer(function TreeContainer() {
         onMove={(args) => {
           console.log(args);
         }}
+        className={css({ width: "100%", height: "100%" })}
         selection={selection}
         onSelect={(args) => {
           const newSelectedId = args[0]?.id;
           if (typeof newSelectedId === "string") {
             admin$.selectedId.set(newSelectedId);
+          } else {
+            admin$.selectedId.set(null);
           }
         }}
+        onFocus={console.log}
       >
         {Node}
       </Tree>

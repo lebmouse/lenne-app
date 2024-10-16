@@ -55,6 +55,7 @@ export const admin$ = observable<{
   },
   renderSchema: null,
   renderRecord: {},
+
   addTreeItem(parentId, schemaRef) {
     const id = nanoid(4);
     const componentSchema = resolveRef(schemaRef, componentJson);
@@ -91,6 +92,7 @@ export const admin$ = observable<{
       }
       return acc;
     }, []);
+
     if (parentId === null) {
       admin$.treeRecord[id].assign({
         id: id,
@@ -99,6 +101,11 @@ export const admin$ = observable<{
       });
     } else {
       admin$.treeRecord[parentId].childrenIds.push(id);
+      admin$.treeRecord[id].assign({
+        id: id,
+        parentId,
+        childrenIds: childrenIds.length > 0 ? childrenIds : undefined,
+      });
     }
   },
 });
