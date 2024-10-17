@@ -8,6 +8,7 @@ import {
   TreeViewItem,
 } from "@/schema/type/render";
 import { observable } from "@legendapp/state";
+import { JSONSchema7 } from "json-schema";
 import { nanoid } from "nanoid";
 
 export const admin$ = observable<{
@@ -16,13 +17,37 @@ export const admin$ = observable<{
   treeRecord: TreeRecord;
   selectedHasChildren: boolean;
   renderRecord: BasicRenderRecord;
+  selectedComponentSchema: {
+    type: "object";
+    properties: {
+      type: { const: string };
+      props: JSONSchema7;
+    };
+  } | null;
   treeView: TreeViewData;
   renderSchema: BasicRenderSchema | null;
   addTreeItem: (parentId: string | null, id: string) => void;
+  removeTreeItem: (id: string) => void;
 }>({
   selectedId: null,
   selectedIds: [],
   treeRecord: {},
+  selectedComponentSchema: () => {
+    const selectedId = admin$.selectedId.get();
+    if (!selectedId) return null;
+    const componentName = admin$.renderRecord[selectedId].name.get();
+    const SUFFIX = "Component";
+    const shcemaKeyName = `${componentName}${SUFFIX}`;
+
+    if (shcemaKeyName in componentJson.components.schemas === false) {
+      return null;
+    }
+    const componentSchema =
+      componentJson.components.schemas[
+        shcemaKeyName as keyof typeof componentJson.components.schemas
+      ];
+    return componentSchema;
+  },
   selectedHasChildren: () => {
     const selectedId = admin$.selectedId.get();
     if (!selectedId) return false;
@@ -43,6 +68,7 @@ export const admin$ = observable<{
         return {
           id: id,
           name: renderNode.name,
+          type: renderNode.type,
           children: treeNode?.childrenIds
             ?.map(createTreeView)
             .filter((item) => item !== undefined),
@@ -55,7 +81,23 @@ export const admin$ = observable<{
   },
   renderSchema: null,
   renderRecord: {},
+  removeTreeItem(id) {
+    const parentId = admin$.treeRecord[id].parentId.get();
+    // clear parent's childrenIds
+    if (parentId) {
+      // clear tree children ids
+      admin$.treeRecord[parentId].childrenIds.set(
+        admin$.treeRecord[parentId].childrenIds
+          .get()
+          .filter((childId) => childId !== id)
+      );
+      // clear render children ids
+      // admin$.renderRecord[parentId].children.set(admin$.renderRecord[parentId].children.get().filter((childId) => childId !== id));
+    }
 
+    admin$.treeRecord[id].delete();
+    admin$.renderRecord[id].delete();
+  },
   addTreeItem(parentId, schemaRef) {
     const id = nanoid(4);
     const componentSchema = resolveRef(schemaRef, componentJson);

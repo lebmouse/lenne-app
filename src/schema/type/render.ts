@@ -34,6 +34,7 @@ export type TreeRecord = Record<string, TreeNode>;
 export type TreeViewItem = {
   id: string;
   name: string;
+  type: string;
   children?: TreeViewItem[];
 };
 
@@ -43,10 +44,52 @@ export type BasicRenderRecord = Record<string, BasicRenderSchema>;
 
 /**
  *  @example
- * const renderSchema: RenderRecord = {
- *   "1": { id: "1", type: "Card", props: { name: "name", age: 1 } },
- *   "2": { id: "2", type: "Card2", props: { name: "name2", age: 1 } },
- *   "3": { id: "3", type: "Container", props: { title: "title", children: ["1", "2"]  } },
- * };
+ * const renderSchema: RenderRecord = 
+ * {
+  "wFTd": {
+      "id": "wFTd",
+      "name": "TwoChildern",
+      "props": {
+          "type": "object",
+          "properties": {
+              "children": {
+                  "$ref": "#/components/schemas/React.ReactNode"
+              },
+              "twoChildren": {
+                  "$ref": "#/components/schemas/React.ReactNode"
+              }
+          }
+      }
+  },
+  "cq11": {
+      "id": "cq11",
+      "name": "children",
+      "type": "ReactNode",
+      "children": []
+  },
+  "4PXx": {
+      "id": "4PXx",
+      "name": "twoChildren",
+      "type": "ReactNode",
+      "children": []
+  },
+  "0W5i": {
+      "id": "0W5i",
+      "name": "Input",
+      "props": {
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string",
+                  "title": "name",
+                  "isRequired": true
+              }
+          },
+          "required": [
+              "name"
+          ]
+      }
+  }
+};
  */
 export type RenderRecord = Record<string, RenderSchema>;

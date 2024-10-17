@@ -1,6 +1,5 @@
 "use client";
 import { JSONSchema7 } from "json-schema";
-import { resolveRef } from "./store";
 import {
   Button,
   ComboBox,
@@ -10,44 +9,27 @@ import {
   Text,
   TextField,
 } from "@adobe/react-spectrum";
-// import { validate } from "typia";
-import schemas from "@/schema/action.json";
+import actionSchemas from "@/schema/action.json";
 import { useState } from "react";
+import { admin$ } from "./store";
+import { observer } from "@legendapp/state/react";
 
-export function ComponentForm() {
-  if (schemas === undefined) {
+export const ComponentForm = observer(function ComponentForm() {
+  const compoentSchemas = admin$.selectedComponentSchema.get();
+  if (!compoentSchemas) {
     return <div>empty</div>;
   }
-  // const validated = validate<{
-  //   type: "object";
-  //   properties: {
-  //     type: { const: string };
-  //     props: JSONSchema7;
-  //   };
-  // }>(schemas);
-
-  // if (validated.success) {
-  //   return (
-  //     <div>
-  //       <Form>
-  //         <Text>{validated.data.properties.type.const}</Text>
-  //         <Field schema={validated.data.properties.props} propsName="" />
-  //         <Button variant="cta">저장</Button>
-  //       </Form>
-  //     </div>
-  //   );
-  // }
-  // if (validated.errors) {
-  //   return <div> {JSON.stringify(validated.errors)}</div>;
-  // }
 
   return (
     <div>
-      <h2>rightPanel</h2>
-      {JSON.stringify(schemas, null, 2)}
+      <Form>
+        <Text>{compoentSchemas.properties.type.const}</Text>
+        <Field schema={compoentSchemas.properties.props} propsName="" />
+        <Button variant="cta">저장</Button>
+      </Form>
     </div>
   );
-}
+});
 
 declare module "json-schema" {
   interface JSONSchema7 {
@@ -110,7 +92,7 @@ function EventForm() {
       <ComboBox
         label={"events"}
         items={Object.entries(
-          schemas.components.schemas.ActionSchema.discriminator.mapping
+          actionSchemas.components.schemas.ActionSchema.discriminator.mapping
         ).map(([name, $ref]) => ({ id: $ref, name }))}
         onSelectionChange={(key) => {
           // if (typeof key === "string") {

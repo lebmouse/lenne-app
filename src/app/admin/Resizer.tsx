@@ -9,9 +9,9 @@ export const Resizer = (props: {
   return (
     <Splitter.Root
       size={[
-        { id: "left", size: 60 },
+        { id: "left", size: 30 },
         { id: "center", size: 40 },
-        // { id: "right", size: 30 },
+        { id: "right", size: 30 },
       ]}
       gap="0.5"
     >
@@ -27,7 +27,7 @@ export const Resizer = (props: {
       <Splitter.Panel id="center" alignItems="start" justifyContent={"start"}>
         {props.centerPannel}
       </Splitter.Panel>
-      {/* <Splitter.ResizeTrigger
+      <Splitter.ResizeTrigger
         id="center:right"
         minW={"1"}
         transition={"ease-out 0.2s"}
@@ -35,7 +35,7 @@ export const Resizer = (props: {
       />
       <Splitter.Panel id="right" alignItems="start" justifyContent={"start"}>
         {props.rightPannel}
-      </Splitter.Panel> */}
+      </Splitter.Panel>
     </Splitter.Root>
   );
 };

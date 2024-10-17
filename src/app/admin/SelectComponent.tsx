@@ -5,10 +5,6 @@ import { admin$ } from "./store";
 import { Select } from "@/park/select";
 import { Button } from "@/park/button";
 import { Flex, Grid } from "styled-system/jsx";
-// import { observable } from "@legendapp/state";
-// import { enableReactComponents } from "@legendapp/state/config/enableReactComponents";
-
-// enableReactComponents();
 
 const schemas = componentJson.components.schemas;
 
@@ -17,8 +13,6 @@ const items = Object.entries(schemas.ComponentSchema.discriminator.mapping).map(
 );
 
 export const SelectComponent = function SelectComponent() {
-  // const [value, setValue] = useState<string[]>([]);
-  const hasSelectedHasChildren = admin$.selectedHasChildren.get();
   return (
     <Flex gap="2" direction={"column"}>
       <Select.Root

@@ -4,21 +4,24 @@ import { TreeContainer } from "./TreeContainer";
 import { css } from "../../../styled-system/css";
 import { Resizer } from "./Resizer";
 import { Box, VStack } from "styled-system/jsx";
+import { SpectrumProvider } from "./provider";
 
 export default function AdminPage() {
   return (
-    <Box h="100vh">
-      <Resizer
-        leftPannel={
-          <section>
-            <SelectComponent />
-            <TreeContainer />
-          </section>
-        }
-        centerPannel={<PreviewPanel />}
-        rightPannel={<ComponentForm />}
-      />
-    </Box>
+    <SpectrumProvider>
+      <Box h="100vh">
+        <Resizer
+          leftPannel={
+            <section>
+              <SelectComponent />
+              <TreeContainer />
+            </section>
+          }
+          centerPannel={<PreviewPanel />}
+          rightPannel={<ComponentForm />}
+        />
+      </Box>
+    </SpectrumProvider>
   );
 }
 

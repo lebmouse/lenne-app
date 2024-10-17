@@ -6,6 +6,9 @@ import { NodeRendererProps, Tree } from "react-arborist";
 import { TreeViewItem } from "@/schema/type/render";
 import { Folder, Leaf } from "lucide-react";
 import { css } from "styled-system/css";
+import { Button } from "@/park/button";
+import { IconButton } from "@/park/icon-button";
+import { Text } from "@/park/text";
 
 export const TreeContainer = observer(function TreeContainer() {
   const treeViewData = Object.values(admin$.treeView.get());
@@ -40,18 +43,42 @@ const Node = observer(function Node({
   style,
   dragHandle,
 }: NodeRendererProps<TreeViewItem>) {
+  const removable = node.data.type !== "ReactNode";
   return (
     <div
       ref={dragHandle}
       className={css({
         display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
         borderRadius: "8px",
+        height: "28px",
       })}
       style={{ ...style, backgroundColor: node.isSelected ? "lightblue" : "" }}
     >
-      {node.isLeaf ? <Leaf size={18} /> : <Folder size={18} />}
-      {node.data.name}
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+          borderRadius: "8px",
+          gap: "4px",
+        })}
+      >
+        {node.isLeaf ? <Leaf size={18} /> : <Folder size={18} />}
+        <Text>{node.data.name}</Text>
+      </div>
+      {removable && (
+        <IconButton
+          variant={"outline"}
+          size={"xs"}
+          className={css({ aspectRatio: 1, h: "90%", width: "auto" })}
+          onClick={() => {
+            admin$.removeTreeItem(node.data.id);
+          }}
+        >
+          X
+        </IconButton>
+      )}
     </div>
   );
 });
