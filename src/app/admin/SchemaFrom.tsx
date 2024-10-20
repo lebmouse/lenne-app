@@ -13,6 +13,7 @@ import actionSchemas from "@/schema/action.json";
 import { useState } from "react";
 import { admin$ } from "./store";
 import { observer } from "@legendapp/state/react";
+import { Flex, VStack } from "styled-system/jsx";
 
 export const ComponentForm = observer(function ComponentForm() {
   const compoentSchemas = admin$.selectedComponentSchema.get();
@@ -21,13 +22,12 @@ export const ComponentForm = observer(function ComponentForm() {
   }
 
   return (
-    <div>
-      <Form>
-        <Text>{compoentSchemas.properties.type.const}</Text>
+    <VStack>
+      <Text>{compoentSchemas.properties.type.const}</Text>
+      <Flex direction={"column"}>
         <Field schema={compoentSchemas.properties.props} propsName="" />
-        <Button variant="cta">저장</Button>
-      </Form>
-    </div>
+      </Flex>
+    </VStack>
   );
 });
 
@@ -37,7 +37,7 @@ declare module "json-schema" {
   }
 }
 
-function Field({
+const Field = observer(function Field({
   schema,
   propsName,
 }: {
@@ -48,9 +48,7 @@ function Field({
     return <EventForm />;
   }
   if (schema.type === "object") {
-    return (
-      <ObjectField key={JSON.stringify(schema).slice(10)} schema={schema} />
-    );
+    return <ObjectField key={JSON.stringify(schema)} schema={schema} />;
   }
   if (schema.type === "string") {
     return <TextField label={schema.title} isRequired={schema.isRequired} />;
@@ -59,12 +57,12 @@ function Field({
     return <NumberField label={schema.title} isRequired={schema.isRequired} />;
   }
   return <div>invalidate field {JSON.stringify(schema)} </div>;
-}
+});
 
 function ObjectField({ schema }: { schema: JSONSchema7 }) {
   if (schema.type === "object" && schema.properties !== undefined) {
     return (
-      <div>
+      <Flex direction={"column"}>
         {Object.entries(schema.properties).map(([key, value]) => {
           if (typeof value !== "boolean") {
             if (typeof value.title === "undefined") {
@@ -78,7 +76,7 @@ function ObjectField({ schema }: { schema: JSONSchema7 }) {
           }
           return <div key={key}>invalide-field(boolean)</div>;
         })}
-      </div>
+      </Flex>
     );
   }
   throw new Error("schema.properties is required");

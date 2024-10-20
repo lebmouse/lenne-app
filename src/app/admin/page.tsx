@@ -1,9 +1,8 @@
 import { SelectComponent } from "./SelectComponent";
-import { ComponentForm } from "./RightPanel";
+import { ComponentForm } from "./SchemaFrom";
 import { TreeContainer } from "./TreeContainer";
-import { css } from "../../../styled-system/css";
 import { Resizer } from "./Resizer";
-import { Box, VStack } from "styled-system/jsx";
+import { Box } from "styled-system/jsx";
 import { SpectrumProvider } from "./provider";
 
 export default function AdminPage() {

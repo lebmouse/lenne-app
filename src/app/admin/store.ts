@@ -24,6 +24,7 @@ export const admin$ = observable<{
       props: JSONSchema7;
     };
   } | null;
+  selectedRenderItem: BasicRenderSchema | null;
   treeView: TreeViewData;
   renderSchema: BasicRenderSchema | null;
   addTreeItem: (parentId: string | null, id: string) => void;
@@ -47,6 +48,11 @@ export const admin$ = observable<{
         shcemaKeyName as keyof typeof componentJson.components.schemas
       ];
     return componentSchema;
+  },
+  selectedRenderItem: () => {
+    const selectedId = admin$.selectedId.get();
+    if (!selectedId) return null;
+    return admin$.renderRecord[selectedId].get();
   },
   selectedHasChildren: () => {
     const selectedId = admin$.selectedId.get();
